@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Linux Command Line — Résumé</title>
+<style>
+:root{--bg:#f5f8fc;--card:#fff;--tx:#0d1520;--mut:#4a5870;--bd:#cfdff5;--ac:#0b5cd5;--ac2:#e3efff;--cb:#dbeaff;--ct:#0b1220;--star:#0b5cd5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0b1220;--card:#121c2e;--tx:#e8eef8;--mut:#9fb0c9;--bd:#24344f;--ac:#5aa2ff;--ac2:#16294a;--star:#8fc0ff}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0b1220;--card:#121c2e;--tx:#e8eef8;--mut:#9fb0c9;--bd:#24344f;--ac:#5aa2ff;--ac2:#16294a;--star:#8fc0ff}
+html{scroll-padding-top:120px;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:linear-gradient(135deg,#061b3f,#0b5cd5 65%,#4aa8ff);color:#fff;padding:46px 20px 38px;text-align:center}
+header h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px);letter-spacing:-.5px}
+header p{margin:0 auto;max-width:640px;opacity:.93}
+.tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 14px;font-size:13px;margin-bottom:14px}
+nav{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--bd);padding:10px 14px;display:flex;gap:6px;overflow-x:auto;white-space:nowrap;align-items:center}
+nav a{color:var(--mut);text-decoration:none;font-size:14px;padding:5px 12px;border-radius:99px;font-weight:600}
+nav a:hover{background:var(--ac2);color:var(--ac)}
+nav input{margin-left:auto;min-width:150px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:99px;padding:5px 12px;font:14px system-ui}
+main{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+.part{margin:42px 0 16px;display:flex;align-items:center;gap:12px}
+.part span{background:var(--ac);color:#fff;font-weight:700;border-radius:10px;padding:4px 12px;white-space:nowrap}
+.part h2{margin:0;font-size:23px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px 22px;margin:14px 0}
+.card h3{margin:0 0 4px;font-size:19px;color:var(--ac)}
+.card>p{margin:0 0 8px}
+.card h4{margin:12px 0 4px;font-size:14px;font-style:italic;color:var(--ac)}
+ul{padding-left:20px;margin:6px 0}li{margin:7px 0}
+pre{background:var(--cb);color:var(--ct);border-left:3px solid #0b5cd5;border-radius:8px;padding:9px 13px;overflow-x:auto;font:13.5px/1.55 ui-monospace,Menlo,Consolas,monospace;margin:6px 0 4px}
+.cw{position:relative}.cw pre{padding-right:78px}
+.cp{position:absolute;top:8px;right:8px;border:1px solid #0b5cd5;background:#fff;color:#0b5cd5;border-radius:6px;font:600 12px system-ui;padding:3px 10px;cursor:pointer}
+.cp:hover{background:#0b5cd5;color:#fff}.cp.ok{background:#0b5cd5;color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{font:12.5px ui-monospace,Menlo,Consolas,monospace;background:var(--ac2);color:var(--ac);border-radius:6px;padding:2px 9px;border:1px solid var(--bd)}
+.chips span.n{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{background:var(--ac2);color:var(--ac);font-size:13px;text-transform:uppercase;letter-spacing:.4px}
+td:last-child{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.leg{color:var(--mut);font-size:14px}
+.hide{display:none}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
+</style>
+</head>
+<body>
+<header>
+<div class="tag">William Shotts · No Starch Press · 2e édition</div>
+<h1>⌨️ The Linux Command Line</h1>
+<p>Une introduction complète : résumé des 36 chapitres, avec un exemple concret pour chaque concept clé.</p>
+</header>
+<nav>
+<a href="#p1">Partie I</a><a href="#p2">Partie II</a><a href="#p3">Partie III</a><a href="#p4">Partie IV</a><a href="#idx">Index</a>
+<input id="q" type="search" placeholder="Filtrer (ex. grep, tar)…" aria-label="Filtrer">
+</nav>
+<main>
+<div class="card">
+<h3>À propos de ce résumé</h3>
+<p>Chaque chapitre comprend un synopsis, des concepts clés (chacun avec un exemple de commande encadré) et la liste des commandes couvertes. Les commandes <span class="chips" style="display:inline"><span class="n">en bleu plein</span></span> apparaissent pour la première fois dans le livre.</p>
+<ul class="leg">
+<li><b>Partie I (Ch. 1–10)</b> : bases du shell, navigation, fichiers, commandes, redirection, expansion, clavier, permissions, processus.</li>
+<li><b>Partie II (Ch. 11–13)</b> : environnement, éditeur vi, invite de commande.</li>
+<li><b>Partie III (Ch. 14–23)</b> : paquets, stockage, réseau, recherche, archivage, regex, texte, impression, compilation.</li>
+<li><b>Partie IV (Ch. 24–36)</b> : écriture de scripts shell, du premier script aux fonctionnalités avancées.</li>
+</ul>
+<p class="leg">Compagnon de lecture, pas un substitut au texte intégral.</p>
+</div>
+<div id="root"></div>
+<div class="part" id="idx"><span>Index</span><h2>Commandes par catégorie</h2></div>
+<div class="card"><div class="wrap"><table id="tb"><tr><th>Catégorie</th><th>Ch.</th><th>Commandes</th></tr></table></div>
+<h4 style="font-size:14px;font-style:italic;color:var(--ac)">Notes finales</h4>
+<p>Le livre est cumulatif : les chapitres suivants supposent la maîtrise des précédents (grep, sed, find, redirection, pipelines), et la partie IV réunit presque tout dans de vrais scripts. Essaie chaque exemple dans un terminal pour ancrer le concept.</p></div>
+</main>
+<footer>Résumé de « The Linux Command Line », 2e édition · William Shotts</footer>
+<script>
+const P=[
+["p1","Partie I","Apprendre le shell",[
+[1,"Qu’est-ce que le shell ?","Le shell est l’interface texte de Linux, accessible via un émulateur de terminal : premières commandes, historique, fin de session.",[
+["Le shell lit les commandes saisies et demande au noyau de les exécuter.","$ date\nSat Oct 24 10:15:02 UTC 2026"],
+["La plupart des distributions utilisent bash par défaut.","$ echo $SHELL\n/bin/bash"],
+["exit (ou fermer la fenêtre) termine la session.","$ exit"]],"date* cal* df* exit"],
+[2,"Navigation","Arborescence unique enracinée en /, répertoire de travail, chemins absolus et relatifs.",[
+["Un seul arbre dont la racine est /, sans lettres de lecteur.","$ ls /\nbin boot dev etc home usr var ..."],
+["pwd affiche, cd change ; absolu = depuis /, relatif = depuis ici.","$ pwd\n/home/alice\n$ cd /etc\n$ cd Documents"],
+["Raccourcis : ~ accueil, . courant, .. parent, - précédent.","$ cd ~\n$ cd ..\n$ cd -"]],"pwd* cd*"],
+[3,"Explorer le système","ls et son format long, file, less, visite des répertoires système, liens symboliques et physiques.",[
+["ls -l montre type, droits, liens, propriétaire, groupe, taille, date.","$ ls -l /etc/hosts\n-rw-r--r-- 1 root root 220 Jan 10 09:00 /etc/hosts"],
+["less visualise sans éditer et permet la recherche.","$ less /etc/passwd   # / pour chercher, q pour quitter"],
+["Lien symbolique = pointeur vers un chemin ; lien physique = autre nom pour le même inode.","$ ln -s /etc/hosts myhosts\n$ ls -l myhosts\nlrwxrwxrwx ... myhosts -> /etc/hosts"]],"ls* file* less*"],
+[4,"Fichiers et répertoires","Jokers (globbing), mkdir, cp, mv, rm, ln, avec un exercice « terrain de jeu ».",[
+["Les jokers *, ?, [...] visent plusieurs fichiers à la fois.","$ ls *.txt\n$ rm file?.log"],
+["cp/mv/rm acceptent -r (récursif) et -i (interactif).","$ cp -r project/ project_backup/\n$ rm -i old_file.txt"],
+["ln crée un lien physique, ou symbolique avec -s.","$ ln original.txt hardlink.txt\n$ ln -s original.txt softlink.txt"]],"mkdir* cp* mv* rm* ln*"],
+[5,"Travailler avec les commandes","Ce qu’est une commande (exécutable, builtin, fonction, alias) et comment obtenir de l’aide.",[
+["type révèle comment le shell interprète un mot.","$ type cd\ncd is a shell builtin\n$ type ls\nls is /usr/bin/ls"],
+["man est la référence ; apropos cherche par mot-clé.","$ man ls\n$ apropos partition"],
+["alias crée ses propres raccourcis.","$ alias ll='ls -l'\n$ ll"]],"type* which* man* apropos* whatis* info* help alias*"],
+[6,"Redirection","Flux stdin/stdout/stderr, redirections, pipelines et filtres classiques.",[
+["Trois flux par défaut : stdin (0), stdout (1), stderr (2).","$ ls /nonexistent 2> errors.txt\n$ ls > out.txt 2>&1"],
+["Un pipeline relie la sortie d’une commande à l’entrée de la suivante.","$ ls -l | grep '^d' | wc -l"],
+["grep, head, tail, wc, uniq sont des outils de base réutilisés partout.","$ sort names.txt | uniq -c\n$ tail -n 20 /var/log/syslog"]],"cat* uniq* wc* grep* head* tail* tee*"],
+[7,"Voir le monde comme le shell","Expansions faites avant l’exécution : chemins, tilde, arithmétique, accolades, paramètres, commandes, et guillemets.",[
+["L’ordre des expansions détermine les arguments réellement reçus.","$ echo file{1..3}.txt\nfile1.txt file2.txt file3.txt"],
+["$(commande) insère une sortie dans une autre commande.","$ echo \"Today is $(date +%A)\"\nToday is Saturday"],
+["Guillemets doubles : la plupart des expansions restent ; simples : aucune.","$ echo \"$HOME has $(ls | wc -l) files\"\n$ echo 'Literal $HOME is not expanded'"]],"echo*"],
+[8,"Astuces clavier avancées","Édition de ligne (Readline), complétion par tabulation, historique et son expansion.",[
+["Raccourcis Readline pour aller plus vite.","Ctrl-A  début de ligne\nCtrl-E  fin de ligne\nCtrl-K  couper jusqu’à la fin"],
+["La tabulation complète fichiers, commandes et variables.","$ cd Doc<TAB>\n-> cd Documents/"],
+["L’expansion de l’historique réutilise des commandes passées.","$ sudo !!\n$ cp report.txt !$"]],"history*"],
+[9,"Permissions","Modèle propriétaire/groupe/autres, chmod, umask, setuid/setgid/sticky, su, sudo, chown/chgrp.",[
+["Trois jeux de droits (r, w, x) pour propriétaire, groupe, autres.","$ ls -l script.sh\n-rwxr-xr-- 1 alice staff 512 ... script.sh"],
+["chmod accepte les modes symbolique et octal.","$ chmod u+x script.sh\n$ chmod 755 script.sh"],
+["sudo exécute en tant que root, de façon plus auditée que su.","$ sudo apt update\n$ sudo chown root:root /etc/myconfig"]],"chmod* umask* su* sudo* chown* chgrp* passwd*"],
+[10,"Processus","PID, parent/enfant, ps et top, signaux, arrière-plan, kill, arrêt du système.",[
+["Chaque programme est un processus avec un PID unique.","$ ps aux | grep firefox\n$ top"],
+["Ctrl-C envoie SIGINT, Ctrl-Z suspend ; jobs/bg/fg gèrent l’état.","$ sleep 100\n^Z\n[1]+ Stopped sleep 100\n$ bg %1"],
+["kill envoie des signaux : SIGTERM en douceur, SIGKILL pour forcer.","$ kill 4821\n$ kill -9 4821\n$ killall firefox"]],"ps* top* jobs* bg* fg* kill* killall* shutdown*"]]],
+["p2","Partie II","Configuration et environnement",[
+[11,"L’environnement","Variables d’environnement, fichiers de démarrage (.bashrc, .bash_profile) et prise en compte des changements.",[
+["PATH, HOME, PS1 configurent le shell pour la session.","$ echo $PATH\n/usr/local/bin:/usr/bin:/bin"],
+["Les fichiers de démarrage conservent les personnalisations.","$ nano ~/.bashrc   # ajouter : export EDITOR=vim"],
+["Un source (ou une nouvelle session) applique les changements.","$ source ~/.bashrc"]],"env* printenv* export* source*"],
+[12,"Introduction à vi","Éditeur omniprésent : trois modes, déplacement, édition, recherche/remplacement, plusieurs fichiers.",[
+["L’édition modale : navigation et saisie sont séparées.","$ vi notes.txt   # i = insertion, Esc = retour"],
+["Disponible sur presque tous les systèmes Unix.",":wq   enregistrer et quitter\n:q!   quitter sans enregistrer"],
+["Remplacement global, même syntaxe que sed.",":%s/foo/bar/g"]],"vi* vim*"],
+[13,"Personnalisation de l’invite","PS1 et ses séquences d’échappement, couleurs ANSI, enregistrement permanent.",[
+["PS1 définit l’invite principale (\\u, \\h, \\w...).","$ PS1='[\\u@\\h \\W]\\$ '\n[alice@laptop ~]$"],
+["Les codes ANSI colorent les éléments.","PS1='\\[\\e[32m\\]\\u@\\h\\[\\e[0m\\]:\\w\\$ '"],
+["Sauvegarder dans .bashrc pour persister.","$ echo \"PS1='[\\u@\\h \\W]\\$ '\" >> ~/.bashrc"]],"PS1"]]],
+["p3","Partie III","Tâches courantes et outils essentiels",[
+[14,"Gestion des paquets","Paquets, dépôts, dépendances ; outils de haut niveau (apt, dnf) et de bas niveau (dpkg, rpm).",[
+["Les outils de haut niveau résolvent les dépendances.","$ sudo apt install htop\n$ sudo dpkg -i package.deb"],
+["Les dépôts sont des collections organisées de paquets.","$ sudo apt update\n$ apt search nginx"],
+["Retrouver le paquet propriétaire d’un fichier.","$ dpkg -S /bin/ls\ncoreutils: /bin/ls"]],"apt-get* dpkg* yum* dnf* rpm*"],
+[15,"Supports de stockage","Montage, noms de périphériques, partitions (fdisk), systèmes de fichiers (mkfs), fsck, images ISO.",[
+["mount/umount attachent et détachent un système de fichiers.","$ sudo mount /dev/sdb1 /mnt/usb\n$ sudo umount /mnt/usb"],
+["fdisk gère les partitions, mkfs crée le système de fichiers.","$ sudo fdisk -l\n$ sudo mkfs -t ext4 /dev/sdb1"],
+["dd copie directement depuis/vers un périphérique.","$ dd if=/dev/sr0 of=disk.iso bs=2048"]],"mount* umount* fdisk* mkfs* fsck* dd*"],
+[16,"Réseau","Diagnostic (ping, traceroute, ip, netstat), transfert de fichiers, ssh, scp, sftp.",[
+["ping/traceroute testent connectivité et routage ; ip gère les interfaces.","$ ping -c 4 example.com\n$ ip addr show"],
+["ssh donne un accès shell distant chiffré.","$ ssh alice@192.168.1.10"],
+["scp et sftp transfèrent via SSH ; wget télécharge.","$ scp report.pdf alice@server:/home/alice/\n$ wget https://example.com/file.tar.gz"]],"ping* traceroute* ip* netstat* ftp* lftp* wget* ssh* scp* sftp*"],
+[17,"Recherche de fichiers","locate (base de données rapide) et find (puissant), -exec et xargs.",[
+["locate est rapide mais dépend d’une base mise à jour périodiquement ; find parcourt le système réel.","$ locate httpd.conf\n$ find /var/log -name '*.log'"],
+["-exec envoie les résultats à une autre commande.","$ find . -name '*.tmp' -exec rm {} \\;"],
+["xargs regroupe les arguments (évite « liste trop longue »).","$ find . -name '*.log' | xargs rm"]],"locate* find* xargs*"],
+[18,"Archivage et sauvegarde","Compression (gzip, bzip2), archives (tar, zip) et synchronisation avec rsync.",[
+["gzip/bzip2 compressent un fichier ; tar regroupe puis compresse.","$ gzip bigfile.txt\n$ tar -czvf backup.tar.gz Documents/"],
+["zip : archives multiplateformes.","$ zip -r archive.zip Photos/"],
+["rsync ne transfère que les parties modifiées.","$ rsync -av Documents/ /mnt/backup/Documents/"]],"gzip* bzip2* tar* zip* unzip* rsync*"],
+[19,"Expressions régulières","Métacaractères, ancres, classes, BRE/ERE POSIX, alternance, quantificateurs, avec grep.",[
+["Un langage de motifs utilisé par grep, sed, find, vim...","$ grep '^root' /etc/passwd"],
+["BRE et ERE diffèrent par l’échappement des métacaractères.","$ grep -E '(cat|dog)' animals.txt"],
+["Quantificateurs et classes pour des motifs réels.","$ grep -E '^[0-9]{3}-[0-9]{4}$' phonelist.txt"]],"grep egrep*"],
+[20,"Traitement de texte","sort, cut, paste, join, comm, diff, patch, tr, sed, aspell.",[
+["Restructurer des données tabulaires.","$ cut -d: -f1 /etc/passwd | sort"],
+["diff et patch : le flux classique pour distribuer des modifications.","$ diff old.c new.c > fix.patch\n$ patch old.c < fix.patch"],
+["sed transforme du texte de façon non interactive.","$ sed 's/foo/bar/g' input.txt > output.txt"]],"sort* cut* paste* join* comm* diff* patch* tr* sed* aspell*"],
+[21,"Formatage de la sortie","nl, fold, fmt, pr, printf et le système de composition groff.",[
+["printf donne un contrôle précis du format.","$ printf '%-10s %5d\\n' Apples 42"],
+["fold, fmt, pr préparent un texte lisible ou imprimable.","$ fold -w 60 longline.txt"],
+["groff : chaîne de composition classique, utilisée pour les pages de manuel.","$ groff -man -Tascii mypage.1 | less"]],"nl* fold* fmt* pr* printf* groff*"],
+[22,"Impression","Historique, puis lpr (BSD) ou lp (System V), suivi des travaux avec lpstat, lpq, lprm, cancel.",[
+["Deux familles de commandes, toutes deux présentes via CUPS.","$ lpr report.pdf\n$ lp report.pdf"],
+["pr prépare une sortie imprimable.","$ pr -h \"Monthly Report\" data.txt | lpr"],
+["Surveiller et annuler des travaux.","$ lpq\n$ lprm 42"]],"lpr* lp* a2ps* lpstat* lpq* lprm* cancel*"],
+[23,"Compilation de programmes","Compiler un programme C depuis les sources : configure, make, make install.",[
+["La compilation traduit le code source en binaire exécutable.","$ gcc -o hello hello.c\n$ ./hello"],
+["Le workflow Unix classique.","$ ./configure\n$ make\n$ sudo make install"],
+["Utile pour les logiciels sans paquet prêt à l’emploi.","$ tar xzf app-1.2.tar.gz\n$ cd app-1.2"]],"gcc* make* ./configure*"]]],
+["p4","Partie IV","Écriture de scripts shell",[
+[24,"Écrire votre premier script","Shebang, permissions d’exécution, emplacement des scripts, lisibilité.",[
+["Le shebang désigne l’interpréteur.","#!/bin/bash\necho \"Hello, World!\""],
+["chmod +x avant exécution directe.","$ chmod +x hello.sh\n$ ./hello.sh"],
+["Indenter et continuer les lignes avec \\.","ls -l \\\n  /etc"]],"chmod+x shebang"],
+[25,"Démarrer un projet","Un script de génération de document : variables, constantes, here documents.",[
+["Les constantes en lecture seule évitent les modifications accidentelles.","TITLE=\"System Report\"\nreadonly TITLE"],
+["Un here document intègre du texte multiligne.","cat <<EOF\nReport generated on $(date)\nEOF"],
+["Le projet s’étend dans presque tous les chapitres suivants.","#!/bin/bash\nTITLE=\"System Report\"\necho \"$TITLE\""]],"readonly* <<EOF"],
+[26,"Conception descendante","Fonctions shell, variables locales et robustesse des scripts longs.",[
+["Les fonctions découpent un script en blocs réutilisables.","print_header () {\n  echo \"=== $1 ===\"\n}\nprint_header \"Report\""],
+["local limite la portée d’une variable.","count_files () {\n  local n=$(ls | wc -l)\n  echo $n\n}"],
+["trap aide à survivre aux interruptions.","trap 'echo Interrupted; exit' SIGINT"]],"function local*"],
+[27,"Contrôle de flux : if","Statut de sortie, test, [[ ]], (( )), opérateurs && et ||.",[
+["0 = succès ; if branche sur le statut de sortie.","grep -q root /etc/passwd\necho $?"],
+["test / [ ] / [[ ]] évaluent fichiers, chaînes, entiers.","if [ -f \"$1\" ]; then\n  echo \"File exists\"\nfi"],
+["&& et || enchaînent de façon conditionnelle.","mkdir backup && cp *.txt backup/ || echo \"Failed\""]],"test* [[ ]]* (( ))*"],
+[28,"Lecture de la saisie","read, options, IFS, validation et menus simples.",[
+["read demande des valeurs à l’utilisateur.","read -p \"Enter your name: \" name\necho \"Hello, $name\""],
+["IFS définit comment l’entrée est découpée.","IFS=: read user pass uid gid rest < /etc/passwd"],
+["read + case = menu interactif.","read -p \"Choice (1-3): \" choice\ncase $choice in\n  1) echo one;;\nesac"]],"read*"],
+[29,"Boucles while / until","Boucles, break/continue et lecture d’un fichier ligne par ligne.",[
+["while et until sont des opposés logiques.","count=1\nwhile [ $count -le 5 ]; do\n  echo $count\n  count=$((count+1))\ndone"],
+["break et continue pilotent la boucle de l’intérieur.","for f in *; do\n  [ -d \"$f\" ] && continue\n  echo \"$f\"\ndone"],
+["Le modèle idiomatique pour traiter un fichier ligne par ligne.","while read -r line; do\n  echo \"Line: $line\"\ndone < file.txt"]],"while* until* break continue"],
+[30,"Dépannage","Erreurs de syntaxe et de logique, cas de test, traçage.",[
+["Guillemets manquants : un classique des débutants.","# Faux : if [ $var = foo ]   (échoue si $var est vide)\n# Juste : if [ \"$var\" = \"foo\" ]"],
+["Le traçage affiche chaque commande exécutée.","$ bash -x myscript.sh"],
+["Programmation défensive : vérifier les entrées.","if [ -z \"$1\" ]; then\n  echo \"Usage: $0 filename\"\n  exit 1\nfi"]],"set -x* bash -n"],
+[31,"Branchement avec case","Branchement multiple par motifs.",[
+["Faire correspondre une valeur à plusieurs motifs.","case $1 in\n  start) echo starting;;\n  stop)  echo stopping;;\n  *)     echo \"unknown\";;\nesac"],
+["Jokers et | pour plusieurs alternatives.","case $file in\n  *.jpg|*.png) echo image;;\n  *.txt) echo text;;\nesac"],
+["Souvent plus lisible qu’une chaîne de if/elif.","case $(uname) in\n  Linux) echo \"Linux system\";;\n  Darwin) echo \"macOS\";;\nesac"]],"case*"],
+[32,"Paramètres positionnels","$1, $2, $#, shift, $@ et $*.",[
+["Les scripts acceptent des arguments comme les commandes.","#!/bin/bash\necho \"First arg: $1, total args: $#\""],
+["shift retire $1 et renumérote le reste.","while [ $# -gt 0 ]; do\n  echo \"$1\"\n  shift\ndone"],
+["\"$@\" transmet tous les arguments en sécurité.","log_all () { echo \"$@\" >> log.txt; }\nlog_all \"$@\""]],"shift* $@ $# $*"],
+[33,"Boucles for","Forme traditionnelle (liste) et forme style C.",[
+["Parcourir une liste séparée par des espaces.","for name in Alice Bob Carol; do\n  echo \"Hello, $name\"\ndone"],
+["La forme C pour les compteurs numériques.","for ((i=0; i<5; i++)); do\n  echo \"$i\"\ndone"],
+["Choisir selon qu’on parcourt des données ou une plage.","for f in *.txt; do\n  mv \"$f\" \"\\${f%.txt}.bak\"\ndone"]],"for*"],
+[34,"Chaînes et nombres","Expansion de paramètres, arithmétique entière, bases, bits et bc.",[
+["Opérations de chaînes sans outil externe.","file=\"report.txt\"\necho \"\\${file%.txt}\"        # report\necho \"\\${file/report/summary}\""],
+["Bash ne gère que les entiers ; bc pour les décimaux.","$ echo \"scale=2; 10/3\" | bc\n3.33"],
+["Éviter des processus externes pour des tâches simples.","x=5\necho $((x * 2 + 1))   # 11"]],"bc* $(( ))"],
+[35,"Tableaux","Tableaux indexés, tranches, opérations et tableaux associatifs.",[
+["Une liste ordonnée sous un seul nom.","fruits=(apple banana cherry)\necho \"\\${fruits[1]}\"   # banana"],
+["declare -A : clés/valeurs, comme un dictionnaire.","declare -A colors\ncolors[apple]=red\necho \"\\${colors[apple]}\""],
+["Taille, clés, ajout d’éléments.","fruits+=(date)\necho \"\\${#fruits[@]}\"   # 4"]],"declare -a* declare -A*"],
+[36,"Exotica","Groupes de commandes, sous-shells, trap, wait, tubes nommés.",[
+["trap exécute un nettoyage à la réception d’un signal.","trap 'rm -f /tmp/lockfile; exit' SIGINT SIGTERM"],
+["wait synchronise avec les tâches d’arrière-plan.","sleep 5 &\nsleep 3 &\nwait\necho \"All background jobs done\""],
+["mkfifo : deux processus communiquent via un tube nommé.","$ mkfifo mypipe\n$ echo hello > mypipe &\n$ cat < mypipe"]],"trap* wait* mkfifo*"]]]];
+const I=[["Navigation et fichiers","2–4","pwd, cd, ls, file, less, mkdir, cp, mv, rm, ln"],["Aide","5","type, which, help, man, apropos, whatis, info, alias"],["Redirection et filtres","6","cat, uniq, wc, grep, head, tail, tee"],["Interaction shell","7–8","echo, history"],["Permissions et identité","9","chmod, umask, su, sudo, chown, chgrp, passwd"],["Processus","10","ps, top, jobs, bg, fg, kill, killall, shutdown"],["Environnement et éditeurs","11–13","env, printenv, export, source, vi/vim, PS1"],["Paquets","14","apt-get/apt, dpkg, yum/dnf, rpm"],["Stockage","15","mount, umount, fdisk, mkfs, fsck, dd"],["Réseau","16","ping, traceroute, ip, netstat, ftp, lftp, wget, ssh, scp, sftp"],["Recherche","17","locate, find, xargs"],["Archivage","18","gzip, bzip2, tar, zip/unzip, rsync"],["Regex et texte","19–20","grep/egrep, sort, cut, paste, join, comm, diff, patch, tr, sed, aspell"],["Formatage et impression","21–22","nl, fold, fmt, pr, printf, groff, lpr, lp, a2ps, lpstat, lpq, lprm/cancel"],["Compilation","23","gcc, make, ./configure"],["Scripts shell","24–36","test, [[ ]], (( )), read, while/until, for, case, shift, bc, declare"]];
+const E=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const cp=(txt,btn)=>{const ok=()=>{btn.textContent="Copié ✓";btn.classList.add("ok");setTimeout(()=>{btn.textContent="Copier";btn.classList.remove("ok")},1500)};const fb=()=>{const t=document.createElement("textarea");t.value=txt;t.style.cssText="position:fixed;opacity:0";document.body.append(t);t.select();try{document.execCommand("copy");ok()}catch(e){}t.remove()};try{navigator.clipboard.writeText(txt).then(ok,fb)}catch(e){fb()}};
+const root=document.getElementById("root");
+P.forEach(([id,lab,ti,chs])=>{
+ const h=E("div","part");h.id=id;h.append(E("span",0,lab),E("h2",0,ti));root.append(h);
+ chs.forEach(([n,t,d,bs,tools])=>{
+  const c=E("div","card ch");c.append(E("h3",0,"Chapitre "+n+" : "+t),E("p",0,d),E("h4",0,"Concepts et exemples clés"));
+  const u=E("ul");bs.forEach(([a,b])=>{const l=E("li",0,a),w=E("div","cw"),bt=E("button","cp","Copier");bt.type="button";bt.setAttribute("aria-label","Copier la commande");bt.onclick=()=>{const cm=b.split("\n").filter(x=>x.startsWith("$ "));cp(cm.length?cm.map(x=>x.slice(2)).join("\n"):b,bt)};w.append(E("pre",0,b),bt);l.append(w);u.append(l)});c.append(u);
+  const ch=E("div","chips");tools.split(" ").forEach(w=>{const s=w.endsWith("*");ch.append(E("span",s?"n":"",s?w.slice(0,-1):w))});
+  c.append(ch);root.append(c)})});
+const tb=document.getElementById("tb");I.forEach(r=>{const tr=E("tr");r.forEach(x=>tr.append(E("td",0,x)));tb.append(tr)});
+document.getElementById("q").addEventListener("input",e=>{const v=e.target.value.toLowerCase();document.querySelectorAll(".ch").forEach(c=>c.classList.toggle("hide",v&&!c.textContent.toLowerCase().includes(v)))});
+</script>
+</body>
+</html>

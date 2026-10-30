@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linux Basics for Hackers — Résumé</title>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--tx:#1b2433;--mut:#5b667a;--bd:#dde3ec;--ac:#0b6ef3;--ac2:#e8f1ff;--code:#0f1b2d;--codetx:#d6e4ff;--ok:#16794a;--okbg:#e6f6ee;--wa:#9a5b00;--wabg:#fff3dc;--rd:#b42318;--rdbg:#fdeceb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0d1420;--card:#152033;--tx:#e6ecf5;--mut:#9aa8bf;--bd:#26344d;--ac:#5aa2ff;--ac2:#14284a;--code:#08101c;--codetx:#cfe0ff;--ok:#5fd39b;--okbg:#10301f;--wa:#ffc766;--wabg:#33260c;--rd:#ff8b80;--rdbg:#3a1714}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0d1420;--card:#152033;--tx:#e6ecf5;--mut:#9aa8bf;--bd:#26344d;--ac:#5aa2ff;--ac2:#14284a;--code:#08101c;--codetx:#cfe0ff;--ok:#5fd39b;--okbg:#10301f;--wa:#ffc766;--wabg:#33260c;--rd:#ff8b80;--rdbg:#3a1714}
+html{scroll-padding-top:70px;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:linear-gradient(135deg,#0b3d91,#0b6ef3 60%,#2fb4ff);color:#fff;padding:48px 20px 40px;text-align:center}
+header h1{margin:0 0 8px;font-size:clamp(26px,5vw,40px);letter-spacing:-.5px}
+header p{margin:0 auto;max-width:640px;opacity:.92}
+.tag{display:inline-block;background:rgba(255,255,255,.18);border-radius:99px;padding:3px 14px;font-size:13px;margin-bottom:14px}
+nav{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;gap:6px;overflow-x:auto;padding:10px 14px;white-space:nowrap}
+nav a{color:var(--mut);text-decoration:none;font-size:14px;padding:5px 12px;border-radius:99px;font-weight:600}
+nav a:hover{background:var(--ac2);color:var(--ac)}
+main{max-width:860px;margin:0 auto;padding:24px 16px 60px}
+.part{margin:44px 0 18px;display:flex;align-items:center;gap:12px}
+.part span{background:var(--ac);color:#fff;font-weight:700;border-radius:10px;padding:4px 12px;white-space:nowrap}
+.part h2{margin:0;font-size:24px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h3{margin:0 0 6px;font-size:19px}
+.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;font-size:14px;margin-right:8px}
+pre{background:var(--code);color:var(--codetx);border-radius:10px;padding:14px 16px;overflow-x:auto;font:13.5px/1.55 ui-monospace,Menlo,Consolas,monospace;margin:12px 0}
+code{font:13.5px ui-monospace,Menlo,Consolas,monospace;background:var(--ac2);color:var(--ac);padding:1px 6px;border-radius:5px}
+pre code{background:none;color:inherit;padding:0}
+.c{color:#7f93b5}
+.box{border-radius:10px;padding:11px 14px;margin:12px 0;font-size:15px;border-left:4px solid}
+.rule{background:var(--wabg);border-color:var(--wa)}
+.key{background:var(--okbg);border-color:var(--ok)}
+.err{background:var(--rdbg);border-color:var(--rd)}
+.box b:first-child{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+.rule b:first-child{color:var(--wa)}.key b:first-child{color:var(--ok)}.err b:first-child{color:var(--rd)}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:10px 0}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--bd);vertical-align:top}
+th{background:var(--ac2);color:var(--ac);font-size:13px;text-transform:uppercase;letter-spacing:.4px}
+ul{padding-left:20px;margin:8px 0}li{margin:5px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips span{font:12.5px ui-monospace,Menlo,Consolas,monospace;background:var(--ac2);color:var(--ac);border-radius:99px;padding:2px 10px}
+.chips span.new{background:var(--wabg);color:var(--wa);font-weight:700}
+.legend{font-size:13.5px;color:var(--mut)}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:20px}
+.cw{position:relative;margin:12px 0}.cw pre{margin:0;padding-right:56px}
+.cp{position:absolute;top:8px;right:8px;width:32px;height:32px;display:grid;place-items:center;padding:0;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#a9bddb;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.cp:hover{background:rgba(255,255,255,.18);color:#fff}.cp:focus-visible{outline:2px solid #5aa2ff;outline-offset:2px}
+.cp svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cp .ck{display:none}.cp.ok{color:#5fd39b;border-color:#5fd39b;background:rgba(95,211,155,.14)}.cp.ok .cc{display:none}.cp.ok .ck{display:block}
+.cp::after{content:attr(data-tip);position:absolute;right:38px;top:50%;transform:translateY(-50%);background:#0b1220;color:#fff;font:600 12px system-ui;padding:3px 8px;border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.cp:hover::after,.cp.ok::after{opacity:1}
+@media (hover:none){.cp:not(.ok)::after{display:none}}
+@media print{nav{display:none}header{background:#0b3d91!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+<div class="tag">OccupyTheWeb · No Starch Press, 2019</div>
+<h1>🐧 Linux Basics for Hackers</h1>
+<p>Premiers pas avec la mise en réseau, les scripts et la sécurité dans Kali — résumé des 17 chapitres avec exemples concrets.</p>
+</header>
+<nav>
+<a href="#apropos">À propos</a><a href="#base">Ch. 1–7</a><a href="#scripts">Ch. 8–10</a><a href="#stealth">Ch. 11–13</a><a href="#wifi">Ch. 14–15</a><a href="#auto">Ch. 16–17</a><a href="#index">Index</a>
+</nav>
+<main>
+
+<div class="card" id="apropos">
+<h3>À propos de ce résumé</h3>
+<p>Le livre enseigne les bases de Linux à travers le prisme de la sécurité offensive, entièrement construit autour de <b>Kali Linux</b>. Chaque chapitre est pratique : les commandes sont enseignées avec leur pertinence pour la reconnaissance, l’exploitation, la furtivité et l’automatisation.</p>
+<div class="wrap"><table>
+<tr><th>Partie</th><th>Chapitres</th><th>Contenu</th></tr>
+<tr><td><b>Compétences de base</b></td><td>1–7</td><td>Système de fichiers, texte, réseau, logiciels, autorisations, processus, variables</td></tr>
+<tr><td><b>Scripts et système</b></td><td>8–10</td><td>Bash (premier scanner de ports), archivage, périphériques de stockage</td></tr>
+<tr><td><b>Furtivité et services</b></td><td>11–13</td><td>Journalisation, Apache/SSH/MySQL, anonymat (Tor, proxys, VPN, GPG)</td></tr>
+<tr><td><b>Sans fil et noyau</b></td><td>14–15</td><td>Wi-Fi et Bluetooth, modules du noyau</td></tr>
+<tr><td><b>Automatisation et Python</b></td><td>16–17</td><td>cron, scripts rc, scanner TCP et craqueur de mots de passe</td></tr>
+</table></div>
+<p class="legend">Préparé comme compagnon de lecture, pas comme substitut au texte intégral. Les outils en <span class="chips" style="display:inline"><span class="new">orange</span></span> apparaissent pour la première fois dans le chapitre.</p>
+</div>
+
+<div class="part" id="base"><span>Partie 1</span><h2>Compétences de base (Ch. 1–7)</h2></div>
+
+<div class="card">
+<h3><span class="num">1</span>Démarrer avec les bases</h3>
+<p>Terminal et hiérarchie du système de fichiers de Kali, commandes de survie, recherche de fichiers et manipulation de base (créer, copier, renommer, supprimer).</p>
+<ul>
+<li><b>pwd / whoami</b> : s’orienter et confirmer son niveau de privilège.</li>
+<li><b>man</b> : la référence pour la syntaxe de chaque commande.</li>
+<li><b>find</b> : recherche flexible (nom, type, taille, date), essentielle pour localiser des fichiers intéressants.</li>
+<li><b>grep</b> : filtre la sortie texte, souvent enchaîné avec d’autres commandes.</li>
+</ul>
+<pre><code>$ pwd                                   <span class="c"># /root</span>
+$ whoami                                <span class="c"># root</span>
+$ man nmap
+$ find / -name "*.conf" -type f 2&gt;/dev/null
+$ cat /etc/passwd | grep bash</code></pre>
+<div class="chips"><span>cd</span><span>locate</span><span>whereis</span><span>which</span><span>touch</span><span>mkdir</span><span>cp</span><span>mv</span><span>rm</span><span>rmdir</span><span class="new">pwd</span><span class="new">whoami</span><span class="new">man</span><span class="new">find</span><span class="new">grep</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">2</span>Manipulation de texte</h3>
+<p>Afficher des parties de fichiers, numéroter les lignes, filtrer, rechercher/remplacer et paginer.</p>
+<ul>
+<li><b>head / tail</b> : début ou fin d’un gros fichier (ex. logs) sans tout ouvrir.</li>
+<li><b>sed</b> : recherche/remplacement non interactif, utile pour modifier rapidement des configurations.</li>
+<li><b>less</b> : défilement et recherche dans de gros fichiers sans les charger en mémoire.</li>
+</ul>
+<pre><code>$ tail -n 20 /var/log/auth.log
+$ sed 's/PermitRootLogin no/PermitRootLogin yes/' /etc/ssh/sshd_config
+$ less /var/log/syslog      <span class="c"># / pour chercher, q pour quitter</span></code></pre>
+<div class="chips"><span class="new">head</span><span class="new">tail</span><span class="new">nl</span><span class="new">sed</span><span class="new">more</span><span class="new">less</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">3</span>Analyse et gestion des réseaux</h3>
+<p>Interfaces (<code>ifconfig</code>, <code>iwconfig</code>), changement d’IP, masque, broadcast et adresse MAC, inspection DNS et mappage manuel des noms d’hôte.</p>
+<ul>
+<li><b>ifconfig / iwconfig</b> : point de départ de toute reconnaissance réseau.</li>
+<li><b>macchanger</b> : usurpation d’adresse MAC pour éviter la détection ou un contrôle d’accès.</li>
+<li><b>dig</b> : interroge les serveurs DNS et révèle les enregistrements d’un domaine.</li>
+<li><b>/etc/hosts</b> : associe des noms d’hôte à des IP choisies (tests, redirection).</li>
+</ul>
+<pre><code>$ ifconfig eth0
+$ iwconfig wlan0
+$ ifconfig eth0 down &amp;&amp; macchanger -r eth0 &amp;&amp; ifconfig eth0 up
+$ dig hackers-arise.com
+$ echo "192.168.1.50 target.local" &gt;&gt; /etc/hosts</code></pre>
+<div class="chips"><span>dhclient</span><span>/etc/resolv.conf</span><span class="new">ifconfig</span><span class="new">iwconfig</span><span class="new">macchanger</span><span class="new">dig</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">4</span>Ajout et suppression de logiciels</h3>
+<p>Gestion des paquets Debian/Kali avec <code>apt</code>, ajout de dépôts via <code>sources.list</code>, installateurs graphiques et installation depuis les sources avec <code>git</code>.</p>
+<pre><code>$ apt search exploit
+$ apt install exploitdb
+$ apt update &amp;&amp; apt upgrade
+$ echo "deb http://example-repo.com/debian/ stable main" &gt;&gt; /etc/apt/sources.list
+$ git clone https://github.com/sqlmapproject/sqlmap.git</code></pre>
+<div class="box key"><b>À retenir</b><code>git clone</code> est le moyen courant d’obtenir des outils distribués seulement via GitHub, pas via apt.</div>
+<div class="chips"><span>sources.list</span><span class="new">apt / apt-get</span><span class="new">git</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">5</span>Autorisations de fichiers et répertoires</h3>
+<p>Modèle utilisateur / groupe / autres, propriété, <code>chmod</code> (octal et symbolique), <code>umask</code> et permissions spéciales (SUID, SGID, sticky bit).</p>
+<pre><code>$ chmod 755 script.sh        <span class="c"># octal</span>
+$ chmod u+x script.sh        <span class="c"># symbolique</span>
+$ umask 022                  <span class="c"># masque par défaut</span>
+$ chown root:root /etc/myconfig
+$ find / -perm -4000 -type f 2&gt;/dev/null   <span class="c"># fichiers SUID</span></code></pre>
+<div class="box rule"><b>Élévation de privilèges</b>SUID fait tourner un programme avec les droits de son propriétaire (souvent root), quel que soit l’utilisateur : cible classique d’escalade.</div>
+<div class="chips"><span>ls -l</span><span>SUID/SGID</span><span class="new">chmod</span><span class="new">chown</span><span class="new">chgrp</span><span class="new">umask</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">6</span>Gestion des processus</h3>
+<p>Affichage (<code>ps</code>, <code>top</code>), priorité (<code>nice</code>), arrêt (<code>kill</code>), arrière-plan et premier plan.</p>
+<pre><code>$ ps aux | grep mysql
+$ top
+$ nice -n 19 nmap -sS 192.168.1.0/24
+$ kill -9 4821
+$ nmap -sS 192.168.1.0/24 &amp;   <span class="c"># arrière-plan</span>
+$ jobs
+$ fg %1</code></pre>
+<p><code>ps</code> et <code>top</code> servent autant à gérer ses outils qu’à la connaissance de la situation après exploitation.</p>
+<div class="chips"><span>jobs</span><span>bg</span><span>fg</span><span class="new">ps</span><span class="new">top</span><span class="new">nice</span><span class="new">kill</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">7</span>Variables d’environnement</h3>
+<p>Affichage, modification temporaire ou permanente (fichiers de démarrage), personnalisation du prompt, modification de <code>PATH</code> et variables personnalisées.</p>
+<pre><code>$ env | grep PATH
+$ export HISTSIZE=0
+$ export TARGET="192.168.1.100"
+$ ping $TARGET</code></pre>
+<div class="box err"><b>Piège de sécurité</b>Placer <code>.</code> ou un répertoire inscriptible en premier dans PATH permet à un attaquant de détourner des commandes avec un binaire malveillant de même nom.<pre><code># Risqué :  export PATH=.:$PATH
+# Plus sûr : export PATH=$PATH:/opt/mytools</code></pre></div>
+<div class="chips"><span>PS1</span><span>/etc/environment</span><span>~/.bashrc</span><span class="new">env</span><span class="new">export</span></div>
+</div>
+
+<div class="part" id="scripts"><span>Partie 2</span><h2>Scripts et composants du système (Ch. 8–10)</h2></div>
+
+<div class="card">
+<h3><span class="num">8</span>Scripts Bash</h3>
+<p>Premier script (« Hello, Hackers-Arise! »), permissions d’exécution, variables, saisie utilisateur. La pièce maîtresse : un <b>scanner de ports</b>, amélioré en scanner MySQL (port 3306) sur une plage d’IP avec boucles et conditions.</p>
+<pre><code>#!/bin/bash
+echo "Hello, Hackers-Arise!"
+
+$ chmod +x HelloHackersArise.sh &amp;&amp; ./HelloHackersArise.sh
+
+read -p "Enter target IP range prefix: " prefix
+for ip in 192.168.1.{1..254}; do
+  (echo &gt; /dev/tcp/$ip/3306) &amp;&gt;/dev/null \
+  &amp;&amp; echo "$ip: port 3306 open"
+done</code></pre>
+<div class="chips"><span>chmod +x</span><span>read</span><span>for</span><span class="new">bash scripting</span><span class="new">/dev/tcp</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">9</span>Compression et archivage</h3>
+<p>Regrouper des fichiers, compresser (gzip, bzip2, compress) et créer des copies bit à bit avec <code>dd</code> (sauvegardes, forensique, exfiltration).</p>
+<pre><code>$ tar -cvzf loot.tar.gz /home/target/Documents
+$ gzip largefile.txt
+$ bzip2 largefile2.txt       <span class="c"># compresse plus, mais plus lent</span>
+$ dd if=/dev/sdb of=/root/disk_image.img bs=4M status=progress</code></pre>
+<div class="chips"><span>compress</span><span class="new">tar</span><span class="new">gzip</span><span class="new">bzip2</span><span class="new">dd</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">10</span>Système de fichiers et périphériques de stockage</h3>
+<p>Répertoire <code>/dev</code>, périphériques caractère et bloc, partitions, montage manuel, espace disque et vérification d’erreurs.</p>
+<pre><code>$ lsblk                      <span class="c"># périphériques de bloc et partitions</span>
+$ mount /dev/sdb1 /mnt/usb
+$ df -h
+$ fsck /dev/sdb1</code></pre>
+<div class="chips"><span class="new">lsblk</span><span class="new">mount</span><span class="new">umount</span><span class="new">df</span><span class="new">fsck</span></div>
+</div>
+
+<div class="part" id="stealth"><span>Partie 3</span><h2>Furtivité, services et sécurité (Ch. 11–13)</h2></div>
+
+<div class="card">
+<h3><span class="num">11</span>Le système de journalisation</h3>
+<p>Démon <code>rsyslog</code> et règles <code>facilité.priorité</code>, rotation avec <code>logrotate</code>, puis, présenté pour la sensibilisation et la défense, effacement de traces et désactivation de la journalisation.</p>
+<pre><code>$ cat /etc/rsyslog.conf      <span class="c"># auth,authpriv.*  /var/log/auth.log</span>
+$ cat /etc/logrotate.conf
+$ sed -i '/192.168.1.77/d' /var/log/auth.log
+$ systemctl stop rsyslog</code></pre>
+<div class="box rule"><b>Côté défense</b>Ces techniques anti-forensiques montrent ce qu’il faut surveiller : lignes manquantes dans les logs et arrêt inattendu de rsyslog.</div>
+<div class="chips"><span class="new">rsyslog</span><span class="new">logrotate</span><span class="new">systemctl</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">12</span>Utilisation et abus des services</h3>
+<p>Démarrage/arrêt de services, puis trois études de cas : serveur <b>Apache</b> (édition d’<code>index.html</code>), « Raspberry Spy Pi » avec <b>OpenSSH</b> et un module caméra, extraction d’informations depuis <b>MySQL</b> (+ note sur PostgreSQL avec Metasploit).</p>
+<pre><code>$ systemctl start apache2 &amp;&amp; systemctl status apache2
+$ nano /var/www/html/index.html
+$ systemctl start ssh
+$ ssh pi@192.168.1.120
+$ mysql -u root -p
+mysql&gt; SHOW DATABASES;
+mysql&gt; SELECT * FROM users;</code></pre>
+<div class="chips"><span>service</span><span>Metasploit</span><span class="new">Apache</span><span class="new">OpenSSH</span><span class="new">MySQL client</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">13</span>Devenir sécurisé et anonyme</h3>
+<p>Comment Internet révèle l’identité (IP, métadonnées), puis couches d’anonymat : <b>Tor</b> (routage en oignon), proxys, <b>VPN</b> et e-mails chiffrés.</p>
+<ul>
+<li><b>Tor</b> : trafic relayé via plusieurs nœuds chiffrés.</li>
+<li><b>Proxy</b> : intermédiaire, mais anonymat généralement plus faible que Tor.</li>
+<li><b>VPN</b> : tunnel chiffré qui masque l’activité au réseau local (FAI).</li>
+<li><b>GPG/PGP</b> : protège le contenu des messages.</li>
+</ul>
+<pre><code>$ apt install tor &amp;&amp; service tor start
+$ torify curl https://check.torproject.org
+$ export http_proxy="http://127.0.0.1:8080"
+$ openvpn --config myvpn.ovpn
+$ gpg --encrypt --recipient alice@example.com message.txt</code></pre>
+<div class="chips"><span class="new">Tor</span><span class="new">OpenVPN</span><span class="new">GPG</span><span>proxy config</span></div>
+</div>
+
+<div class="part" id="wifi"><span>Partie 4</span><h2>Sans fil et noyau (Ch. 14–15)</h2></div>
+
+<div class="card">
+<h3><span class="num">14</span>Réseaux sans fil</h3>
+<p>Inspection des adaptateurs et réseaux Wi-Fi, reconnaissance avec la suite <b>aircrack-ng</b> (mode moniteur, capture), fonctionnement du Bluetooth et scan d’appareils proches.</p>
+<pre><code>$ iwlist wlan0 scan | grep ESSID
+$ airmon-ng start wlan0      <span class="c"># mode moniteur</span>
+$ airodump-ng wlan0mon       <span class="c"># capture 802.11</span>
+$ hcitool scan               <span class="c"># Bluetooth</span></code></pre>
+<div class="chips"><span>iwconfig</span><span>iwlist</span><span class="new">airmon-ng</span><span class="new">airodump-ng</span><span class="new">hcitool</span><span class="new">bluetoothctl</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">15</span>Noyau et modules chargeables</h3>
+<p>Qu’est-ce qu’un module, version du noyau, paramètres à chaud avec <code>sysctl</code>, gestion des modules : pertinent pour les pilotes comme pour les rootkits noyau.</p>
+<pre><code>$ uname -r                   <span class="c"># 5.4.0-kali3-amd64</span>
+$ sysctl -w net.ipv4.ip_forward=1
+$ modinfo usbcore
+$ insmod mymodule.ko
+$ modprobe -r mymodule</code></pre>
+<div class="box key"><b>À retenir</b>La version du noyau sert à faire correspondre des exploits à une cible ; le chargement de modules est le mécanisme que détournent les rootkits.</div>
+<div class="chips"><span class="new">uname</span><span class="new">sysctl</span><span class="new">modinfo</span><span class="new">modprobe</span><span class="new">insmod</span><span class="new">rmmod</span></div>
+</div>
+
+<div class="part" id="auto"><span>Partie 5</span><h2>Automatisation et Python (Ch. 16–17)</h2></div>
+
+<div class="card">
+<h3><span class="num">16</span>Planification des tâches</h3>
+<p><code>cron</code>/<code>crontab</code> (dont planification du scanner MySQL et raccourcis <code>@reboot</code>, <code>@daily</code>), puis scripts rc et niveaux d’exécution pour lancer des tâches au démarrage (utile pour la persistance).</p>
+<pre><code>$ crontab -e
+0 2 * * * /root/scripts/mysqlscanner.sh
+@reboot /root/scripts/startup_check.sh
+$ update-rc.d mytool defaults</code></pre>
+<div class="chips"><span>runlevels</span><span class="new">cron / crontab</span><span class="new">rc.d / update-rc.d</span></div>
+</div>
+
+<div class="card">
+<h3><span class="num">17</span>Bases de Python pour les pirates</h3>
+<p>Installation de modules avec <code>pip</code>, fondamentaux (variables, fonctions, listes, modules, POO), client et écouteur TCP, dictionnaires, boucles, puis amélioration des scripts précédents et craqueur de mot de passe avec gestion des exceptions.</p>
+<pre><code>$ pip install scapy
+
+import socket
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(("192.168.1.10", 80))      <span class="c"># client TCP</span>
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(("0.0.0.0", 9999))
+server.listen(5)                          <span class="c"># écouteur TCP</span>
+
+try:
+    attempt_login(password)
+except ConnectionError:
+    continue                              <span class="c"># ignore l’échec, continue</span></code></pre>
+<div class="chips"><span class="new">Python 3</span><span class="new">pip</span><span class="new">socket</span></div>
+</div>
+
+<div class="part" id="index"><span>Index</span><h2>Outils par catégorie</h2></div>
+<div class="card">
+<div class="wrap"><table>
+<tr><th>Catégorie</th><th>Ch.</th><th>Outils / commandes</th></tr>
+<tr><td>Fichiers et recherche</td><td>1</td><td>pwd, whoami, man, locate, whereis, which, find, grep</td></tr>
+<tr><td>Texte</td><td>2</td><td>head, tail, nl, sed, more, less</td></tr>
+<tr><td>Réseau et DNS</td><td>3</td><td>ifconfig, iwconfig, macchanger, dig</td></tr>
+<tr><td>Paquets</td><td>4</td><td>apt/apt-get, sources.list, git</td></tr>
+<tr><td>Autorisations</td><td>5</td><td>chmod, chown, chgrp, umask, SUID/SGID</td></tr>
+<tr><td>Processus</td><td>6</td><td>ps, top, nice, kill, jobs, bg, fg</td></tr>
+<tr><td>Variables</td><td>7</td><td>env, export, PATH, PS1</td></tr>
+<tr><td>Scripts</td><td>8, 17</td><td>bash, /dev/tcp, Python 3, pip, socket</td></tr>
+<tr><td>Archivage</td><td>9</td><td>tar, gzip, bzip2, dd</td></tr>
+<tr><td>Stockage</td><td>10</td><td>lsblk, mount, umount, df, fsck</td></tr>
+<tr><td>Journalisation</td><td>11</td><td>rsyslog, logrotate, systemctl</td></tr>
+<tr><td>Services</td><td>12</td><td>Apache, OpenSSH, MySQL client</td></tr>
+<tr><td>Anonymat</td><td>13</td><td>Tor, proxy, OpenVPN, GPG</td></tr>
+<tr><td>Sans fil</td><td>14</td><td>aircrack-ng (airmon-ng, airodump-ng), hcitool, bluetoothctl</td></tr>
+<tr><td>Noyau</td><td>15</td><td>uname, sysctl, modinfo, modprobe, insmod, rmmod</td></tr>
+<tr><td>Planification</td><td>16</td><td>cron/crontab, rc.d, update-rc.d</td></tr>
+</table></div>
+<div class="box key"><b>Notes finales</b>Le livre est une rampe d’accès : aucune expérience Linux requise, juste assez de chaque sujet pour débuter en pentesting. Il date de 2019, donc certaines versions d’outils ou noms de paquets ont pu changer, mais les commandes et concepts de base restent d’actualité. Les derniers chapitres (bash et Python) servent de pont vers l’écriture d’outils personnalisés.</div>
+</div>
+
+</main>
+<footer>Résumé de « Linux Basics for Hackers » · OccupyTheWeb, No Starch Press, 2019</footer>
+<script>
+(function(){
+var SV='<svg class="cc" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><svg class="ck" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+function text(pre){var c=pre.cloneNode(true);c.querySelectorAll('.c').forEach(function(e){e.remove()});var L=c.textContent.split('\n').map(function(l){return l.replace(/\s+$/,'')});var cm=L.filter(function(l){return l.indexOf('$ ')===0});return (cm.length?cm.map(function(l){return l.slice(2)}):L).join('\n').trim()}
+function copy(t,b){function ok(){b.classList.add('ok');b.dataset.tip='Copié !';b.setAttribute('aria-label','Copié');setTimeout(function(){b.classList.remove('ok');b.dataset.tip='Copier';b.setAttribute('aria-label','Copier le code')},1600)}
+function fb(){var a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){}a.remove()}
+try{navigator.clipboard.writeText(t).then(ok,fb)}catch(e){fb()}}
+document.querySelectorAll('pre').forEach(function(p){var w=document.createElement('div');w.className='cw';p.parentNode.insertBefore(w,p);w.appendChild(p);var b=document.createElement('button');b.type='button';b.className='cp';b.dataset.tip='Copier';b.title='Copier';b.setAttribute('aria-label','Copier le code');b.innerHTML=SV;b.onclick=function(){copy(text(p),b)};w.appendChild(b)});
+})();
+</script>
+</body>
+</html>
